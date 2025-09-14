@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    text-align: center;
+    padding: 24px;
+}
+
+h1 {
+    margin-bottom: 18px;
+}
+
+#contenedorJuego {
+    width: 360px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 16px 18px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+#imagen img {
+    width: 220px;
+    max-width: 100%;
+}
+
+#informaichon {
+    display:flex;
+    justify-content:space-between;
+    margin: 10px 0;
+    font-size:14px;
+    color:#374151;
+}
+
+#palabraOculta {
+    font-size: 26px;
+    letter-spacing: 8px;
+    margin: 12px 0;
+    min-height: 34px;
+    font-weight: 700;
+}
+
+#inputLetra {
+    margin: 12px 0;
+}
+#inputLetra input {
+    width: 48px;
+    font-size: 20px;
+    text-align: center;
+    padding: 6px;
+    margin-right: 8px;
+}
+#btn-probar {
+    padding: 8px 12px;
+}
+
+.msg {
+    min-height: 22px;
+    font-weight: 600;
+    margin: 8px 0;
+}
+
+#botones button {
+    margin: 6px;
+    padding: 8px 12px;
+}
