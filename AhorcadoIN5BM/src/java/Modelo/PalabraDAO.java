@@ -26,11 +26,11 @@ public class PalabraDAO {
 
             while (rs.next()) {
                 Palabra p = new Palabra();
-                p.setCodigoPalabra(rs.getInt("codigoPalabra"));
+                p.setCodigoPalabra(rs.getInt("codigo_palabra"));
                 p.setNombre(rs.getString("nombre"));
-                p.setCualidadUno(rs.getString("cualidadUno"));
-                p.setCualidadDos(rs.getString("cualidadDos"));
-                p.setCualidadTres(rs.getString("cualidadTres"));
+                p.setCualidadUno(rs.getString("cualidad_uno"));
+                p.setCualidadDos(rs.getString("cualidad_dos"));
+                p.setCualidadTres(rs.getString("cualidad_tres"));
 
                 listaPalabras.add(p);
             }

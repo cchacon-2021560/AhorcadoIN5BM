@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             palabraMostrar.push("_");
         }
 
-        mensajeEl.textContent = "Falso suerte, comienza a adivinar letra por letra.";
+        mensajeEl.textContent = "Buena suerte, comienza a adivinar letra por letra.";
         btnIniciar.disabled = true;
         actualizarUI();
         mostrarPalabraEnPantalla();
