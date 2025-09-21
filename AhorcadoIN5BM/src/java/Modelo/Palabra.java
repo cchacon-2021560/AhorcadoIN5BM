@@ -7,6 +7,17 @@ public class Palabra {
     private String cualidadDos;
     private String cualidadTres;
 
+    public Palabra() {
+    }
+
+    public Palabra(int codigoPalabra, String nombre, String cualidadUno, String cualidadDos, String cualidadTres) {
+        this.codigoPalabra = codigoPalabra;
+        this.nombre = nombre;
+        this.cualidadUno = cualidadUno;
+        this.cualidadDos = cualidadDos;
+        this.cualidadTres = cualidadTres;
+    }
+    
     public int getCodigoPalabra() {
         return codigoPalabra;
     }

@@ -1,32 +1,108 @@
+/*
+* Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+* Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package Controlador;
 
-public class Validar {
+import Modelo.Usuario;
+import Modelo.UsuarioDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-    public boolean correoValido(String correo) {
-        if (correo == null || correo.isEmpty()) {
-            return false;
+/**
+ *
+ * @author informatica
+ */
+public class Validar extends HttpServlet {
+
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
+    Usuario usuario = new Usuario();
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Validar</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet Validar at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-
-        if (!correo.contains("@") || !correo.contains(".")) {
-            return false;
-        }
-
-        if (!(correo.endsWith("@gmail.com") || correo.endsWith("@outlook.com") || correo.endsWith("@yahoo.com"))) {
-            return false;
-        }
-
-        return true;
     }
 
-    public boolean contraValida(String password) {
-        if (password == null || password.length() < 4) {
-            return false;
-        }
-
-        if (password.contains(" ")) {
-            return false;
-        }
-
-        return true;
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
     }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String btnIngresar = request.getParameter("btnIngresar");
+        if (btnIngresar != null && btnIngresar.equalsIgnoreCase("Ingresar")) {
+
+            String correo = request.getParameter("txtCorreo");
+            String pass = request.getParameter("txtContrasena");
+
+            Usuario usuario = usuarioDAO.validar(correo, pass);
+
+            if (usuario != null) {
+                request.setAttribute("usuario", usuario);
+                request.getRequestDispatcher("Controlador?accion=jugar").forward(request, response);
+            } else {
+                request.setAttribute("error", "Credenciales incorrectas");
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
+        } else {
+            request.getRequestDispatcher("ahorcado.jsp").forward(request, response);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
 }
