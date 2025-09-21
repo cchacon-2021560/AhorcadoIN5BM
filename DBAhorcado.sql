@@ -14,7 +14,7 @@ create table Palabras(
 create table Usuarios(
 	codigo_usuario int auto_increment,
     correo varchar(100) not null,
-    contraseña varchar(20) not null,
+    contra varchar(20) not null,
     primary key PK_Usuario(codigo_usuario)
 );
  
@@ -88,7 +88,7 @@ create procedure sp_AgregarUsuario(
 	in p_contrasena varchar(20)
 )
 	begin
-		insert into Usuarios (correo, contraseña)
+		insert into Usuarios (correo, contra)
 			values(p_correo, p_contrasena);
 	end$$
 delimiter ;
@@ -116,12 +116,10 @@ create procedure sp_ActualizarUsuario(
 		update Usuarios u
 		set
 			u.correo = p_correo,
-			u.contraseña = p_contrasena
+			u.contra = p_contrasena
 		where u.codigo_usuario = p_codigo;
 	end$$
 delimiter ;
-
-call sp_ActualizarUsuario(1, 'nuevo_correo@correo.com', 'nuevaClave');
 
 drop procedure sp_ActualizarUsuario;
 
@@ -136,5 +134,8 @@ create procedure sp_EliminarUsuario(
 delimiter ;
 
 call sp_EliminarUsuario(2);
+
+call sp_ListarUsuarios();
+call sp_ListarPalabras();
 
  
