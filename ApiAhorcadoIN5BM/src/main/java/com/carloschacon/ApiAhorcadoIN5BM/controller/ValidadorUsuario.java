@@ -1,10 +1,8 @@
 package com.carloschacon.ApiAhorcadoIN5BM.controller;
 
-import com.carloschacon.ApiAhorcadoIN5BM.service.UsuarioInvalidoException;
 import com.carloschacon.ApiAhorcadoIN5BM.model.Usuario;
 import com.carloschacon.ApiAhorcadoIN5BM.repository.UsuarioRepository;
-
-import java.util.regex.Pattern;
+import com.carloschacon.ApiAhorcadoIN5BM.service.UsuarioInvalidoException;
 
 public class ValidadorUsuario {
 
@@ -14,33 +12,36 @@ public class ValidadorUsuario {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void validar(Usuario usuario) {
-        if (usuario.getCorreo() == null || usuario.getCorreo().trim().isEmpty()) {
+    public void validarDuplicado(String correo) {
+        boolean existe = usuarioRepository.findAll().stream()
+                .anyMatch(u -> u.getCorreo().equalsIgnoreCase(correo));
+        if (existe) {
+            throw new UsuarioInvalidoException("El correo ya está registrado.");
+        }
+    }
+
+    public void validarDuplicado(String correo, Integer id) {
+        boolean existe = usuarioRepository.findAll().stream()
+                .anyMatch(u ->
+                        u.getCorreo().equalsIgnoreCase(correo)
+                                && !u.getCodigoUsuario().equals(id)
+                );
+        if (existe) {
+            throw new UsuarioInvalidoException("El correo ya está registrado.");
+        }
+    }
+
+    public void validarFormatoYNoVacio(Usuario usuario) {
+        if (usuario.getCorreo() == null || usuario.getCorreo().isBlank()) {
             throw new UsuarioInvalidoException("El correo no puede estar vacío.");
         }
 
-        if (usuario.getContra() == null || usuario.getContra().trim().isEmpty()) {
+        if (!usuario.getCorreo().matches("^[A-Za-z0-9+_.-]+@(gmail|yahoo|edu|org)\\.[a-z]{2,6}$")) {
+            throw new UsuarioInvalidoException("El correo no tiene un dominio válido.");
+        }
+
+        if (usuario.getContra() == null || usuario.getContra().isBlank()) {
             throw new UsuarioInvalidoException("La contraseña no puede estar vacía.");
-        }
-
-        String regexCorreo = "^[A-Za-z0-9+_.-]+@(.+)$";
-        if (!Pattern.matches(regexCorreo, usuario.getCorreo())) {
-            throw new UsuarioInvalidoException("El formato del correo no es válido.");
-        }
-
-        String correo = usuario.getCorreo().toLowerCase();
-        if (!(correo.endsWith("@gmail.com") ||
-                correo.endsWith("@yahoo.com") ||
-                correo.endsWith(".edu") ||
-                correo.endsWith("@outlook.com") ||
-                correo.endsWith(".org"))) {
-            throw new UsuarioInvalidoException("El dominio del correo no está permitido. Solo se aceptan: gmail, yahoo, edu, org.");
-        }
-
-        boolean existeCorreo = usuarioRepository.findAll().stream()
-                .anyMatch(u -> u.getCorreo().equalsIgnoreCase(usuario.getCorreo()));
-        if (existeCorreo) {
-            throw new UsuarioInvalidoException("El correo ya está registrado.");
         }
     }
 }

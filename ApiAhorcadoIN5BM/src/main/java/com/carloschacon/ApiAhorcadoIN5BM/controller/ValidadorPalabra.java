@@ -1,11 +1,18 @@
 package com.carloschacon.ApiAhorcadoIN5BM.controller;
 
-import com.carloschacon.ApiAhorcadoIN5BM.service.PalabraInvalidaException;
 import com.carloschacon.ApiAhorcadoIN5BM.model.Palabra;
+import com.carloschacon.ApiAhorcadoIN5BM.repository.PalabraRepository;
+import com.carloschacon.ApiAhorcadoIN5BM.service.PalabraInvalidaException;
 
 public class ValidadorPalabra {
 
-    public static void validar(Palabra palabra) {
+    private final PalabraRepository palabraRepository;
+
+    public ValidadorPalabra(PalabraRepository palabraRepository) {
+        this.palabraRepository = palabraRepository;
+    }
+
+    public void validarCampos(Palabra palabra) {
         if (palabra.getNombre() == null || palabra.getNombre().trim().isEmpty()) {
             throw new PalabraInvalidaException("El nombre de la palabra no puede estar vacío.");
         }
@@ -27,5 +34,21 @@ public class ValidadorPalabra {
         if (palabra.getCualidadTres() == null || palabra.getCualidadTres().trim().isEmpty()) {
             throw new PalabraInvalidaException("La cualidad tres no puede estar vacía.");
         }
+    }
+
+    public void validarDuplicadoCrear(String nombre) {
+        palabraRepository.findByNombreIgnoreCase(nombre.trim())
+                .ifPresent(p -> {
+                    throw new PalabraInvalidaException("La palabra '" + nombre.trim() + "' ya existe.");
+                });
+    }
+    
+    public void validarDuplicadoActualizar(String nombre, Integer id) {
+        palabraRepository.findByNombreIgnoreCase(nombre.trim())
+                .ifPresent(p -> {
+                    if (!p.getCodigoPalabra().equals(id)) {
+                        throw new PalabraInvalidaException("La palabra ya existe.");
+                    }
+                });
     }
 }

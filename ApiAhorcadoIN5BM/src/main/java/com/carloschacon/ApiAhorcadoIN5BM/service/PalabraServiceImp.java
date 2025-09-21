@@ -1,10 +1,10 @@
 package com.carloschacon.ApiAhorcadoIN5BM.service;
 
-import com.carloschacon.ApiAhorcadoIN5BM.repository.PalabraRepository;
 import com.carloschacon.ApiAhorcadoIN5BM.model.Palabra;
+import com.carloschacon.ApiAhorcadoIN5BM.repository.PalabraRepository;
 import com.carloschacon.ApiAhorcadoIN5BM.controller.ValidadorPalabra;
-import com.carloschacon.ApiAhorcadoIN5BM.service.PalabraInvalidaException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,9 +12,11 @@ import java.util.List;
 public class PalabraServiceImp implements PalabraService {
 
     private final PalabraRepository palabraRepository;
+    private final ValidadorPalabra validadorPalabra;
 
-    public PalabraServiceImp(PalabraRepository palabraRepository){
+    public PalabraServiceImp(PalabraRepository palabraRepository) {
         this.palabraRepository = palabraRepository;
+        this.validadorPalabra = new ValidadorPalabra(palabraRepository);
     }
 
     @Override
@@ -28,28 +30,26 @@ public class PalabraServiceImp implements PalabraService {
     }
 
     @Override
+    @Transactional
     public Palabra savePalabra(Palabra palabra) {
-        ValidadorPalabra.validar(palabra);
 
-        if (palabraRepository.findByNombreIgnoreCase(palabra.getNombre()).isPresent()) {
-            throw new PalabraInvalidaException("La palabra '" + palabra.getNombre() + "' ya existe.");
-        }
+        validadorPalabra.validarCampos(palabra);
+
+
+        validadorPalabra.validarDuplicadoCrear(palabra.getNombre());
+
 
         return palabraRepository.save(palabra);
     }
 
+
     @Override
     public Palabra updatePalabra(Integer id, Palabra palabra) {
-        ValidadorPalabra.validar(palabra);
-
         Palabra existingPalabra = palabraRepository.findById(id).orElse(null);
 
         if (existingPalabra != null) {
-            palabraRepository.findByNombreIgnoreCase(palabra.getNombre()).ifPresent(p -> {
-                if (!p.getCodigoPalabra().equals(id)) {
-                    throw new PalabraInvalidaException("La palabra '" + palabra.getNombre() + "' ya existe.");
-                }
-            });
+            validadorPalabra.validarCampos(palabra);
+            validadorPalabra.validarDuplicadoActualizar(palabra.getNombre(), id);
 
             existingPalabra.setNombre(palabra.getNombre());
             existingPalabra.setCualidadUno(palabra.getCualidadUno());
@@ -57,7 +57,6 @@ public class PalabraServiceImp implements PalabraService {
             existingPalabra.setCualidadTres(palabra.getCualidadTres());
             return palabraRepository.save(existingPalabra);
         }
-
         return null;
     }
 
