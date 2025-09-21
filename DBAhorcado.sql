@@ -93,9 +93,9 @@ create procedure sp_AgregarUsuario(
 	end$$
 delimiter ;
 
-call sp_AgregarUsuario('pepito@correo.com', 'onetu');
-call sp_AgregarUsuario('andres@correo.com', 'trifor');
-call sp_AgregarUsuario('bartolome@correo.com', 'siseven');
+call sp_AgregarUsuario('pepito@gmail.com', 'onetu');
+call sp_AgregarUsuario('andres@gmail.com', 'trifor');
+call sp_AgregarUsuario('bartolome@gmail.com', 'siseven');
 
 delimiter $$
 create procedure sp_ListarUsuarios()
@@ -123,7 +123,7 @@ delimiter ;
 
 drop procedure sp_ActualizarUsuario;
 
-delimiter $$
+delimiter $$	
 create procedure sp_EliminarUsuario(
 	in p_codigo int
 )
