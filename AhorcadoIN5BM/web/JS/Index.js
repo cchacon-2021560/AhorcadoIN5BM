@@ -15,27 +15,27 @@ async function cargarPalabrasDesdeDB() {
     try {
         const timestamp = new Date().getTime();
         const response = await fetch(`Controlador?accion=Listar&t=${timestamp}`);
-        
+
         if (!response.ok) {
             throw new Error('Error: ' + response.status);
         }
-        
+
         const palabrasDB = await response.json();
-        
+
         if (!palabrasDB || palabrasDB.length === 0) {
             throw new Error('No se encontraron palabras en la base de datos');
         }
-        
+
         palabrasOriginal = palabrasDB.map(palabra => ({
-            texto: palabra.nombre,
-            cualidades: [
-                palabra.cualidadUno,
-                palabra.cualidadDos,
-                palabra.cualidadTres
-            ]
-        }));
-        
-        console.log('Palabras cargadas desde BD:', palabrasOriginal);
+                texto: palabra.nombre,
+                cualidades: [
+                    palabra.cualidadUno,
+                    palabra.cualidadDos,
+                    palabra.cualidadTres
+                ]
+            }));
+
+        console.log('Palabras cargadas desde la BD:', palabrasOriginal);
         return true;
     } catch (error) {
         console.error('Error al cargar palabras desde BD:', error);
@@ -48,7 +48,7 @@ async function cargarPalabrasDesdeDB() {
 document.addEventListener('DOMContentLoaded', async function () {
     // Cargar palabras desde la base de datos
     await cargarPalabrasDesdeDB();
-    
+
     const imgEl = document.getElementById('ahorcado-img');
     const palabraEl = document.getElementById('palabraOculta');
     const letrasUsadasEl = document.getElementById('letrasUsadas');
@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 clearInterval(intervalo);
                 mensajeEl.textContent = "El tiempo ha terminado. La palabra era: " + palabraSecreta;
+                mostrarModal("Se acabó el tiempo. La palabra era " + palabraSecreta);
                 palabraMostrar = palabraSecreta.split('');
                 mostrarPalabraEnPantalla();
                 deshabilitarEntrada();
@@ -140,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             btnIniciar.disabled = false;
             return;
         }
-        
+
         palabraSecreta = palabraActual.texto;
         mostrarCualidades();
 
@@ -170,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             mensajeEl.textContent = "El juego está en pausa.";
             return;
         }
-        
+
         let letra = inputLetra.value.trim().toLowerCase();
         inputLetra.value = "";
 
@@ -206,6 +207,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Ganar
         if (!palabraMostrar.includes("_")) {
             mensajeEl.textContent = "¡Has ganado! Palabra: " + palabraSecreta;
+            mostrarModal("¡Ganaste! La palabra era: " + palabraSecreta);
             deshabilitarEntrada();
             // siguiente palabra:
             setTimeout(configurarSiguientePalabra, 1200);
@@ -215,6 +217,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Perder
         if (intentos >= maxIntentos) {
             mensajeEl.textContent = "Has perdido. La palabra era: " + palabraSecreta;
+            mostrarModal("Perdiste La palabra era: " + palabraSecreta);
             palabraMostrar = palabraSecreta.split('');
             mostrarPalabraEnPantalla();
             deshabilitarEntrada();
@@ -252,12 +255,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             mensajeEl.textContent = "No se pudo iniciar el juego. Error en la base de datos.";
             return; // No continuar si no se pudieron cargar las palabras
         }
-        
+
         if (palabrasOriginal.length === 0) {
             mensajeEl.textContent = "No hay palabras disponibles en la base de datos.";
             return;
         }
-        
+
         palabrasDisponibles = palabrasOriginal.slice();
         configurarSiguientePalabra();
     }
@@ -268,21 +271,42 @@ document.addEventListener('DOMContentLoaded', async function () {
             mensajeEl.textContent = "No se pudo reiniciar el juego. Error en la base de datos.";
             return; // No continuar si no se pudieron cargar las palabras
         }
-        
+
         if (palabrasOriginal.length === 0) {
             mensajeEl.textContent = "No hay palabras disponibles en la base de datos.";
             return;
         }
-        
+
         palabrasDisponibles = palabrasOriginal.slice();
         configurarSiguientePalabra();
         reiniciarContador();
         iniciarContador();
     }
 
+    function mostrarModal(mensaje) {
+        const modal = document.getElementById("modal");
+        const modalMensaje = document.getElementById("modal-mensaje");
+        modalMensaje.textContent = mensaje;
+        modal.style.display = "flex";
+    }
+
+    document.getElementById("modal-cerrar").onclick = function () {
+        document.getElementById("modal").style.display = "none";
+    };
+
+    window.onclick = function (event) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+
+
+
     window.probarLetra = probarLetra;
 
     deshabilitarEntrada();
     document.getElementById('maxIntentos').textContent = maxIntentos;
     palabraEl.textContent = "Pulsa Inicio";
+
 });
