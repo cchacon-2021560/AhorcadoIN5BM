@@ -47,6 +47,7 @@
             <div id="modal" class="modal">
                 <div class="modal-content">
                     <span id="modal-cerrar" class="cerrar">&times;</span>
+                    <img src="" alt="Modal" id="modal-img"/>
                     <p id="modal-mensaje"></p>
                 </div>
             </div>
