@@ -60,6 +60,7 @@ public class PalabraServiceImp implements PalabraService {
 
     @Override
     public void deletePalabra(Integer id) {
+        
         palabraRepository.deleteById(id);
     }
 }

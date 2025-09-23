@@ -30,6 +30,7 @@ public class UsuarioServiceImp implements UsuarioService {
     @Override
     public Usuario saveUsuario(Usuario usuario) {
         ValidadorUsuario validator = new ValidadorUsuario(usuarioRepository);
+        validator.validarFormatoYNoVacio(usuario);
         validator.validarDuplicado(usuario.getCorreo());
         return usuarioRepository.save(usuario);
     }
