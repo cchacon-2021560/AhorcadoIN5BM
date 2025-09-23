@@ -30,7 +30,7 @@ public class UsuarioServiceImp implements UsuarioService {
     @Override
     public Usuario saveUsuario(Usuario usuario) {
         ValidadorUsuario validator = new ValidadorUsuario(usuarioRepository);
-        validator.validar(usuario);
+        validator.validarDuplicado(usuario.getCorreo());
         return usuarioRepository.save(usuario);
     }
 
@@ -40,7 +40,9 @@ public class UsuarioServiceImp implements UsuarioService {
 
         if (existingUsuario != null) {
             ValidadorUsuario validator = new ValidadorUsuario(usuarioRepository);
-            validator.validar(usuario);
+
+            validator.validarDuplicado(usuario.getCorreo(), id);
+            validator.validarFormatoYNoVacio(usuario);
 
             existingUsuario.setCorreo(usuario.getCorreo());
             existingUsuario.setContra(usuario.getContra());
@@ -49,6 +51,7 @@ public class UsuarioServiceImp implements UsuarioService {
 
         return null;
     }
+
 
     @Override
     public void deleteUsuario(Integer id) {

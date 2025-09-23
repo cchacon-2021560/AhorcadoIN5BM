@@ -6,6 +6,8 @@ package Controlador;
 
 import Modelo.Palabra;
 import Modelo.PalabraDAO;
+import Modelo.Usuario;
+import Modelo.UsuarioDAO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -24,6 +26,7 @@ public class Controlador extends HttpServlet {
 
     PalabraDAO palabraDAO = new PalabraDAO();
     Validar validar = new Validar();
+    UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     private String escapeJson(String text) {
         if (text == null) {
@@ -42,12 +45,14 @@ public class Controlador extends HttpServlet {
         String accion = request.getParameter("accion");
 
         if ("login".equals(accion)) {
-            String correo = request.getParameter("correo");
-            String password = request.getParameter("password");
+            String correo = request.getParameter("txtCorreo");
+            String password = request.getParameter("txtContrasena");
 
-            if (validar.correoValido(correo) && validar.contraValida(password)) {
+            Usuario usuario = usuarioDAO.validar(correo, password);
+
+            if (usuario != null) {
                 HttpSession sesion = request.getSession();
-                sesion.setAttribute("usuario", correo);
+                sesion.setAttribute("usuario", usuario);
 
                 response.sendRedirect("Controlador?accion=jugar");
             } else {
@@ -65,7 +70,6 @@ public class Controlador extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
 
             List<Palabra> lista = palabraDAO.listar();
-
 
             StringBuilder json = new StringBuilder();
             json.append("[");

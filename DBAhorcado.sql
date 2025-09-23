@@ -4,7 +4,7 @@ use db_Ahorcado;
  
 create table Palabras(
 	codigo_palabra int auto_increment,
-	nombre varchar(20) not null,
+	nombre varchar(20) unique not null,
 	cualidad_uno varchar(100) not null,
 	cualidad_dos varchar(100) not null,
 	cualidad_tres varchar(100) not null,
@@ -14,7 +14,7 @@ create table Palabras(
 create table Usuarios(
 	codigo_usuario int auto_increment,
     correo varchar(100) not null,
-    contraseña varchar(20) not null,
+    contra varchar(20) not null,
     primary key PK_Usuario(codigo_usuario)
 );
  
@@ -70,7 +70,7 @@ create procedure sp_ActualizarPalabra(
 	where codigo_palabra = codP;
     end$$
 delimiter ;
-call sp_ActualizarPalabra(1, "Elefantin", "Grande", "Vive en manadas", "Tiene trompa");
+call sp_ActualizarPalabra(1, "Elefante", "Grande", "Vive en manadas", "Tiene trompa");
 drop procedure sp_ActualizarPalabra;
  
 delimiter $$
@@ -88,14 +88,14 @@ create procedure sp_AgregarUsuario(
 	in p_contrasena varchar(20)
 )
 	begin
-		insert into Usuarios (correo, contraseña)
+		insert into Usuarios (correo, contra)
 			values(p_correo, p_contrasena);
 	end$$
 delimiter ;
 
-call sp_AgregarUsuario('pepito@correo.com', 'onetu');
-call sp_AgregarUsuario('andres@correo.com', 'trifor');
-call sp_AgregarUsuario('bartolome@correo.com', 'siseven');
+call sp_AgregarUsuario('mickey@gmail.com', 'onetu');
+call sp_AgregarUsuario('andres@gmail.com', 'trifor');
+call sp_AgregarUsuario('bartolome@gmail.com', 'siseven');
 
 delimiter $$
 create procedure sp_ListarUsuarios()
@@ -116,16 +116,14 @@ create procedure sp_ActualizarUsuario(
 		update Usuarios u
 		set
 			u.correo = p_correo,
-			u.contraseña = p_contrasena
+			u.contra = p_contrasena
 		where u.codigo_usuario = p_codigo;
 	end$$
 delimiter ;
 
-call sp_ActualizarUsuario(1, 'nuevo_correo@correo.com', 'nuevaClave');
-
 drop procedure sp_ActualizarUsuario;
 
-delimiter $$
+delimiter $$	
 create procedure sp_EliminarUsuario(
 	in p_codigo int
 )
@@ -135,6 +133,8 @@ create procedure sp_EliminarUsuario(
 	end$$
 delimiter ;
 
-call sp_EliminarUsuario(2);
+
+call sp_ListarUsuarios();
+call sp_ListarPalabras();
 
  
