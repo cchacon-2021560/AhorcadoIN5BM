@@ -43,9 +43,9 @@ public class PalabraServiceImp implements PalabraService {
 
     @Override
     public Palabra updatePalabra(Integer id, Palabra palabra) {
-        Palabra existingPalabra = palabraRepository.findById(id).orElse(null);
+        Palabra existingPalabra = palabraRepository.findById(id)
+                .orElseThrow(() -> new PalabraInvalidaException("Palabra no encontrada con id " + id));
 
-        if (existingPalabra != null) {
             validadorPalabra.validarCampos(palabra);
             validadorPalabra.validarDuplicadoActualizar(palabra.getNombre(), id);
 
@@ -54,13 +54,13 @@ public class PalabraServiceImp implements PalabraService {
             existingPalabra.setCualidadDos(palabra.getCualidadDos());
             existingPalabra.setCualidadTres(palabra.getCualidadTres());
             return palabraRepository.save(existingPalabra);
-        }
-        return null;
     }
 
     @Override
     public void deletePalabra(Integer id) {
-        
+        if (!palabraRepository.existsById(id)) {
+            throw new PalabraInvalidaException("No se puede eliminar. Palabra no encontrada con id " + id);
+        }
         palabraRepository.deleteById(id);
     }
 }

@@ -37,9 +37,9 @@ public class UsuarioServiceImp implements UsuarioService {
 
     @Override
     public Usuario updateUsuario(Integer id, Usuario usuario) {
-        Usuario existingUsuario = usuarioRepository.findById(id).orElse(null);
+        Usuario existingUsuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioInvalidoException("El usuario con el id " + id + " no fue encontrado."));
 
-        if (existingUsuario != null) {
             ValidadorUsuario validator = new ValidadorUsuario(usuarioRepository);
 
             validator.validarDuplicado(usuario.getCorreo(), id);
@@ -48,14 +48,15 @@ public class UsuarioServiceImp implements UsuarioService {
             existingUsuario.setCorreo(usuario.getCorreo());
             existingUsuario.setContra(usuario.getContra());
             return usuarioRepository.save(existingUsuario);
-        }
 
-        return null;
     }
 
 
     @Override
     public void deleteUsuario(Integer id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new PalabraInvalidaException("No se ha encontrado el usuario con el id " + id);
+        }
         usuarioRepository.deleteById(id);
     }
 }
