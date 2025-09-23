@@ -14,9 +14,9 @@ public class PalabraServiceImp implements PalabraService {
     private final PalabraRepository palabraRepository;
     private final ValidadorPalabra validadorPalabra;
 
-    public PalabraServiceImp(PalabraRepository palabraRepository) {
+    public PalabraServiceImp(PalabraRepository palabraRepository, ValidadorPalabra validadorPalabra) {
         this.palabraRepository = palabraRepository;
-        this.validadorPalabra = new ValidadorPalabra(palabraRepository);
+        this.validadorPalabra = validadorPalabra;
     }
 
     @Override
@@ -26,19 +26,17 @@ public class PalabraServiceImp implements PalabraService {
 
     @Override
     public Palabra getPalabraById(Integer id) {
-        return palabraRepository.findById(id).orElse(null);
+        return palabraRepository.findById(id)
+                .orElseThrow(() -> new PalabraInvalidaException("Palabra no encontrada con id " + id));
     }
 
     @Override
     @Transactional
     public Palabra savePalabra(Palabra palabra) {
-
         validadorPalabra.validarCampos(palabra);
-
-
-        validadorPalabra.validarDuplicadoCrear(palabra.getNombre());
-
-
+        if (validadorPalabra.existeDuplicado(palabra.getNombre())) {
+            throw new PalabraInvalidaException("La palabra '" + palabra.getNombre().trim() + "' ya existe.");
+        }
         return palabraRepository.save(palabra);
     }
 

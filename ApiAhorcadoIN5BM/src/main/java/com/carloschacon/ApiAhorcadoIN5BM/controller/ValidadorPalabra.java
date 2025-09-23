@@ -3,7 +3,9 @@ package com.carloschacon.ApiAhorcadoIN5BM.controller;
 import com.carloschacon.ApiAhorcadoIN5BM.model.Palabra;
 import com.carloschacon.ApiAhorcadoIN5BM.repository.PalabraRepository;
 import com.carloschacon.ApiAhorcadoIN5BM.service.PalabraInvalidaException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ValidadorPalabra {
 
     private final PalabraRepository palabraRepository;
@@ -36,13 +38,11 @@ public class ValidadorPalabra {
         }
     }
 
-    public void validarDuplicadoCrear(String nombre) {
-        palabraRepository.findByNombreIgnoreCase(nombre.trim())
-                .ifPresent(p -> {
-                    throw new PalabraInvalidaException("La palabra '" + nombre.trim() + "' ya existe.");
-                });
+    public boolean existeDuplicado(String nombre) {
+        return palabraRepository.findByNombreIgnoreCase(nombre.trim()).isPresent();
     }
-    
+
+
     public void validarDuplicadoActualizar(String nombre, Integer id) {
         palabraRepository.findByNombreIgnoreCase(nombre.trim())
                 .ifPresent(p -> {

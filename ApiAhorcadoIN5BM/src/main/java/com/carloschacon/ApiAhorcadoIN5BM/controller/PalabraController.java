@@ -28,7 +28,7 @@ public class PalabraController {
     }
 
     @PostMapping
-    public Palabra createPalabra(@RequestBody Palabra palabra) {
+    public Palabra savePalabra(@RequestBody Palabra palabra) {
         return palabraService.savePalabra(palabra);
     }
 
