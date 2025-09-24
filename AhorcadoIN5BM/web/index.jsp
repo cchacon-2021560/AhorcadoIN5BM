@@ -17,6 +17,13 @@
             <input type="hidden" name="accion" value="login">
             <div class="form-title"><span>Inicia Sesión</span></div>
             <div class="title-2"><span>AHORCADO</span></div>
+
+            <% if (request.getAttribute("error") != null) {%>
+            <div style="color: red; font-weight: bold; margin-bottom: 10px; text-align:center;">
+                <%= request.getAttribute("error")%>
+            </div>
+            <% }%>
+
             <div class="input-container">
                 <input id="correo" placeholder="Email" type="email" class="input-mail" name="txtCorreo" required />
                 <span> </span>
@@ -32,7 +39,7 @@
             <div class="input-container">
                 <input id="password" placeholder="Password" type="password" class="input-pwd" name="txtContrasena" required />
             </div>
-            
+
             <button id="login-btn" class="submit" type="submit" name="btnIngresar" value="Ingresar">
                 <span class="sign-text">INGRESAR</span>
             </button>

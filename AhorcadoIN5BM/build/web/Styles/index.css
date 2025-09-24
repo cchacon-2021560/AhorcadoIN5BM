@@ -189,7 +189,7 @@ p {
     transform: translate(-50%, -50%);
     background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
     border-radius: 16px;
-    box-shadow: 
+    box-shadow:
         0 25px 50px -12px rgba(0, 0, 0, 0.25),
         0 0 0 1px rgba(255, 255, 255, 0.05),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -284,7 +284,7 @@ p {
 .modal.error .modal-content {
     background: linear-gradient(145deg, #fef2f2 0%, #fee2e2 100%);
     border-color: rgba(239, 68, 68, 0.2);
-    box-shadow: 
+    box-shadow:
         0 25px 50px -12px rgba(239, 68, 68, 0.15),
         0 0 0 1px rgba(239, 68, 68, 0.1);
 }
@@ -296,7 +296,7 @@ p {
 .modal.success .modal-content {
     background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
     border-color: rgba(34, 197, 94, 0.2);
-    box-shadow: 
+    box-shadow:
         0 25px 50px -12px rgba(34, 197, 94, 0.15),
         0 0 0 1px rgba(34, 197, 94, 0.1);
 }
@@ -311,12 +311,12 @@ p {
         width: calc(100% - 40px);
         border-radius: 12px;
     }
-    
+
     #modal-mensaje {
         padding: 32px 24px 24px;
         font-size: 15px;
     }
-    
+
     .cerrar {
         top: 12px;
         right: 16px;
@@ -335,17 +335,26 @@ p {
         border-color: rgba(75, 85, 99, 0.8);
         color: #f9fafb;
     }
-    
+
     #modal-mensaje {
         color: #d1d5db;
     }
-    
+
     .cerrar {
         color: #9ca3af;
     }
-    
+
     .cerrar:hover {
         background-color: rgba(239, 68, 68, 0.2);
         color: #dc2626;
+    }
+
+    #modal-img {
+        max-width: 100%;
+        max-height: 60vh;
+        object-fit: contain;
+        margin: 0 auto;
+        display: block;
+        transition: all 0.3s ease-in-out;
     }
 }

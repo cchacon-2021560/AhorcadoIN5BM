@@ -42,11 +42,13 @@
                 <button id="btnReiniciar">Reiniciar</button>
                 <button id ="btnPausar">Pausar/Continuar</button>
                 <button id ="btnRendirse">Rendirse</button>
+                <button class="btnSalir" type="button" onclick="window.location.href='index.jsp'">SALIR</button>
             </div>
 
             <div id="modal" class="modal">
                 <div class="modal-content">
                     <span id="modal-cerrar" class="cerrar">&times;</span>
+                    <img src="" alt="Modal" id="modal-img"/>
                     <p id="modal-mensaje"></p>
                 </div>
             </div>

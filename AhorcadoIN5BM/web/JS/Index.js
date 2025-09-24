@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 clearInterval(intervalo);
                 mensajeEl.textContent = "El tiempo ha terminado. La palabra era: " + palabraSecreta;
-                mostrarModal("Se acabó el tiempo. La palabra era " + palabraSecreta);
+                mostrarModal("Se acabó el tiempo. La palabra era " + palabraSecreta, 'perder');
                 palabraMostrar = palabraSecreta.split('');
                 mostrarPalabraEnPantalla();
                 deshabilitarEntrada();
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Ganar
         if (!palabraMostrar.includes("_")) {
             mensajeEl.textContent = "¡Has ganado! Palabra: " + palabraSecreta;
-            mostrarModal("¡Ganaste! La palabra era: " + palabraSecreta);
+            mostrarModal("¡Ganaste! La palabra era: " + palabraSecreta, 'ganar');
             deshabilitarEntrada();
             // siguiente palabra:
             setTimeout(configurarSiguientePalabra, 1200);
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Perder
         if (intentos >= maxIntentos) {
             mensajeEl.textContent = "Has perdido. La palabra era: " + palabraSecreta;
-            mostrarModal("Perdiste La palabra era: " + palabraSecreta);
+            mostrarModal("Perdiste La palabra era: " + palabraSecreta, 'perder');
             palabraMostrar = palabraSecreta.split('');
             mostrarPalabraEnPantalla();
             deshabilitarEntrada();
@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function rendirse() {
         clearInterval(intervalo);
         mensajeEl.textContent = "Te rendiste. La palabra era: " + palabraSecreta;
+        mostrarModal("Te has Rendido!!!", 'rendir');
         palabraMostrar = palabraSecreta.split('');
         mostrarPalabraEnPantalla();
         deshabilitarEntrada();
@@ -283,12 +284,27 @@ document.addEventListener('DOMContentLoaded', async function () {
         iniciarContador();
     }
 
-    function mostrarModal(mensaje) {
+    function mostrarModal(mensaje, imgenGP) {
         const modal = document.getElementById("modal");
         const modalMensaje = document.getElementById("modal-mensaje");
+        const imgM = document.getElementById("modal-img");
+
+        if (imgenGP === 'ganar') {
+            imgM.src = "img/ganarJuego.jpg";
+        } else if (imgenGP === 'perder') {
+            imgM.src = "img/perderJuego.jpg";
+        } else if (imgenGP === 'rendir') {
+            imgM.src="img/rendirJuego.jpeg";
+        }
+
         modalMensaje.textContent = mensaje;
+
         modal.style.display = "flex";
     }
+
+    document.getElementById("modal-cerrar").onclick = function () {
+        document.getElementById("modal").style.display = "none";
+    };
 
     document.getElementById("modal-cerrar").onclick = function () {
         document.getElementById("modal").style.display = "none";

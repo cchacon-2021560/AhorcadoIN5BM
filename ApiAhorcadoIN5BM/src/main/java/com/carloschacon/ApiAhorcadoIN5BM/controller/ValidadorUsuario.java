@@ -37,7 +37,7 @@ public class ValidadorUsuario {
         }
 
         if (!usuario.getCorreo().matches("^[A-Za-z0-9+_.-]+@(gmail|yahoo|edu|org)\\.[a-z]{2,6}$")) {
-            throw new UsuarioInvalidoException("El correo no tiene un dominio válido.");
+            throw new UsuarioInvalidoException("El correo no tiene un dominio válido o no está completo.");
         }
 
         if (usuario.getContra() == null || usuario.getContra().isBlank()) {
