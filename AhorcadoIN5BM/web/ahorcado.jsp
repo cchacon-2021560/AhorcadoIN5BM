@@ -42,6 +42,7 @@
                 <button id="btnReiniciar">Reiniciar</button>
                 <button id ="btnPausar">Pausar/Continuar</button>
                 <button id ="btnRendirse">Rendirse</button>
+                <button class="btnSalir" type="button" onclick="window.location.href='index.jsp'">SALIR</button>
             </div>
 
             <div id="modal" class="modal">
