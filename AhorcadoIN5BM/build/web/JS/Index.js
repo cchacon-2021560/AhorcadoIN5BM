@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function rendirse() {
         clearInterval(intervalo);
         mensajeEl.textContent = "Te rendiste. La palabra era: " + palabraSecreta;
+        mostrarModal("Te has Rendido!!!", 'rendir');
         palabraMostrar = palabraSecreta.split('');
         mostrarPalabraEnPantalla();
         deshabilitarEntrada();
@@ -292,6 +293,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             imgM.src = "img/ganarJuego.jpg";
         } else if (imgenGP === 'perder') {
             imgM.src = "img/perderJuego.jpg";
+        } else if (imgenGP === 'rendir') {
+            imgM.src="img/rendirJuego.jpeg";
         }
 
         modalMensaje.textContent = mensaje;
